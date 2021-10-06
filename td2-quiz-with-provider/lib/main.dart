@@ -8,7 +8,12 @@ import 'package:quiz/data/models/game.dart';
 import 'package:quiz/presentation/pages/my_quizz_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => GameModel(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,19 +22,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-          value: GameModel(),
-        ),
-      ],
-      child: MaterialApp(
+    return  MaterialApp(
       title: 'Questions/Réponses',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: MyQuizPage(title: 'Questions/Réponses'),
-    )
     );
+    
   }
 }
