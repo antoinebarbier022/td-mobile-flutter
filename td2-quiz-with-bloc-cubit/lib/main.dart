@@ -8,11 +8,6 @@ import 'package:quiz/buisness_logic/cubits/next_question_cubit.dart';
 import 'package:quiz/buisness_logic/cubits/score_quiz_cubit.dart';
 import 'package:quiz/ui/pages/my_quizz_page.dart';
 
-
-
-
-
-
 void main() {
   runApp(const MyApp());
 }
@@ -24,25 +19,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-  providers: [
-    BlocProvider<NextQuestionCubit>(
-      create: (BuildContext context) => NextQuestionCubit(),
-    ),
-    BlocProvider<ScoreQuizCubit>(
-      create: (BuildContext context) => ScoreQuizCubit(),
-    ),
-    BlocProvider<AnswerQuestionCubit>(
-      create: (BuildContext context) => AnswerQuestionCubit(),
-    ),
-  ],
-  child:  MaterialApp(
-      title: 'Questions/Réponses',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      providers: [
+        BlocProvider<NextQuestionCubit>(
+          create: (BuildContext context) => NextQuestionCubit(),
+        ),
+        BlocProvider<ScoreQuizCubit>(
+          create: (BuildContext context) => ScoreQuizCubit(),
+        ),
+        BlocProvider<AnswerQuestionCubit>(
+          create: (BuildContext context) => AnswerQuestionCubit(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Questions/Réponses',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyQuizPage(title: 'Questions/Réponses'),
       ),
-      home: MyQuizPage(title: 'Questions/Réponses'),
-    ),
-);
-    
+    );
   }
 }
