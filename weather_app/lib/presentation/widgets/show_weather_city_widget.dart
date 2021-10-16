@@ -9,7 +9,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:weather_app/presentation/widgets/weather_image_widget.dart';
 
 class ShowWeatherCityWidget extends StatelessWidget {
-  ShowWeatherCityWidget({required this.weather, required this.weatherDaily, required this.city});
+  ShowWeatherCityWidget(
+      {required this.weather, required this.weatherDaily, required this.city});
 
   WeatherModel weather;
   WeatherDailyModel weatherDaily;
@@ -27,16 +28,24 @@ class ShowWeatherCityWidget extends StatelessWidget {
           style: Theme.of(context).textTheme.headline1,
           textAlign: TextAlign.center,
         ),
-        Text(DateFormat.yMMMMEEEEd('fr_FR').format(DateTime.fromMicrosecondsSinceEpoch(weather.dt  * 1000000)).toString(),
+        Text(
+            DateFormat.yMMMMEEEEd('fr_FR')
+                .format(
+                    DateTime.fromMicrosecondsSinceEpoch(weather.dt * 1000000))
+                .toString(),
             style: Theme.of(context).textTheme.headline3),
         const SizedBox(height: 40),
         SizedBox(
-            height: 200,
-            child: getWeatherImage(
-                weatherDescription:
-                    weather.weather.elementAt(0).main.toString(), dt: weather.dt, sunrise: weather.sys.sunrise, sunset: weather.sys.sunset, ),),
+          height: 200,
+          child: getWeatherImage(
+            weatherDescription: weather.weather.elementAt(0).main.toString(),
+            dt: weather.dt,
+            sunrise: weather.sys.sunrise,
+            sunset: weather.sys.sunset,
+          ),
+        ),
         //Text(weather.weather.elementAt(0).main.toString(),
-            //style: Theme.of(context).textTheme.headline3),
+        //style: Theme.of(context).textTheme.headline3),
         const SizedBox(height: 30),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -49,7 +58,7 @@ class ShowWeatherCityWidget extends StatelessWidget {
                 height: 40, child: VerticalDivider(color: Colors.grey)),
             DataElementWidget(
                 title: "Vent",
-                data: (weather.wind.speed*3.6).toInt().toString(),
+                data: (weather.wind.speed * 3.6).toInt().toString(),
                 type: "km/h"),
             const SizedBox(
                 height: 40, child: VerticalDivider(color: Colors.grey)),
@@ -72,18 +81,44 @@ class ShowWeatherCityWidget extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: <Widget>[
-              CardDataDayWidget(weatherDaily: weatherDaily, index: 1,),
-              CardDataDayWidget(weatherDaily: weatherDaily, index: 2,),
-              CardDataDayWidget(weatherDaily: weatherDaily, index: 3,),
-              CardDataDayWidget(weatherDaily: weatherDaily, index: 4,),
-              CardDataDayWidget(weatherDaily: weatherDaily, index: 5,),
-              CardDataDayWidget(weatherDaily: weatherDaily, index: 6,),
-              CardDataDayWidget(weatherDaily: weatherDaily, index: 7,),
+              CardDataDayWidget(
+                weatherDaily: weatherDaily,
+                index: 1,
+              ),
+              CardDataDayWidget(
+                weatherDaily: weatherDaily,
+                index: 2,
+              ),
+              CardDataDayWidget(
+                weatherDaily: weatherDaily,
+                index: 3,
+              ),
+              CardDataDayWidget(
+                weatherDaily: weatherDaily,
+                index: 4,
+              ),
+              CardDataDayWidget(
+                weatherDaily: weatherDaily,
+                index: 5,
+              ),
+              CardDataDayWidget(
+                weatherDaily: weatherDaily,
+                index: 6,
+              ),
+              CardDataDayWidget(
+                weatherDaily: weatherDaily,
+                index: 7,
+              ),
             ],
           ),
         ),
         const SizedBox(height: 40),
-        Text("Dernière mise à jour : ${DateFormat.Hm('fr_FR').format(DateTime.fromMicrosecondsSinceEpoch(weather.dt  * 1000000)).toString()}", style: TextStyle(fontSize: 12 ,fontWeight: FontWeight.bold, color: Colors.grey[400]))
+        Text(
+            "Dernière mise à jour : ${DateFormat.Hm('fr_FR').format(DateTime.fromMicrosecondsSinceEpoch(weather.dt * 1000000)).toString()}",
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[400]))
       ],
     );
   }

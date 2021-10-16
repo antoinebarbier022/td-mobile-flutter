@@ -26,7 +26,6 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           yield WeatherLoaded(weather, weatherDaily);
       
       } catch (error) {
-        print(error);
         yield WeatherNotLoaded(error);
       }
     }

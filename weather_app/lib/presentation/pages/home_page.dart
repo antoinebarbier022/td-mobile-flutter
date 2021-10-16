@@ -8,7 +8,6 @@ class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
- 
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +16,9 @@ class MyHomePage extends StatelessWidget {
     weatherBloc.add(GetWeather(location));
 
     final controllerLocation = TextEditingController();
-    
-
-    
 
     return Scaffold(
-        
+
         /*appBar: AppBar(
           title: Text(title),
           automaticallyImplyLeading: false,
@@ -34,54 +30,52 @@ class MyHomePage extends StatelessWidget {
           ],
         ),*/
         body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                  const SizedBox(height: 30,),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    child:  TextField(
-                      controller: controllerLocation,
-                      
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-
-                        enabledBorder: const UnderlineInputBorder(      
-                          borderSide: BorderSide(color: Colors.white),   
-                          ),  
-                        
-                        filled: true,
-                        
-                        hintText: "Entrer une ville",
-                        hintStyle: TextStyle(color: Colors.white),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            if(controllerLocation.text == ""){
-                              weatherBloc.add(GetWeather("Montpellier"));
-                            }else{
-                              weatherBloc.add(GetWeather(controllerLocation.text));
-                            }
-                            
-                          },
-                          icon: Icon(Icons.search),
-                          color: Colors.white,
-                      ),
-                    ),
-                  ),),
-                 
-                BlocBuilder<WeatherBloc, WeatherState>(
-                  builder: (context, state){
-                    if(state is WeatherLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }else if(state is WeatherLoaded){
-                      return 
-                        ShowWeatherCityWidget(weather: state.getWeather, weatherDaily: state.getWeatherDaily, city: location,);  
-                    }else if(state is WeatherNotLoaded){
-                      return const Center(
-                      child:Text("Aucun résultats"));
-                    }
-                    return const Center(
-                      child:Text("Aucun résultats"));
-                  },
-            )])));
+            child: Column(children: [
+      const SizedBox(
+        height: 30,
+      ),
+      Container(
+        padding: const EdgeInsets.all(16.0),
+        child: TextField(
+          controller: controllerLocation,
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            filled: true,
+            hintText: "Entrer une ville",
+            hintStyle: const TextStyle(color: Colors.white),
+            suffixIcon: IconButton(
+              onPressed: () {
+                if (controllerLocation.text == "") {
+                  weatherBloc.add(GetWeather("Montpellier"));
+                } else {
+                  weatherBloc.add(GetWeather(controllerLocation.text));
+                }
+              },
+              icon: const Icon(Icons.search),
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+      BlocBuilder<WeatherBloc, WeatherState>(
+        builder: (context, state) {
+          if (state is WeatherLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is WeatherLoaded) {
+            return ShowWeatherCityWidget(
+              weather: state.getWeather,
+              weatherDaily: state.getWeatherDaily,
+              city: location,
+            );
+          } else if (state is WeatherNotLoaded) {
+            return const Center(child: Text("Aucun résultats"));
+          }
+          return const Center(child: Text("Aucun résultats"));
+        },
+      )
+    ])));
   }
 }
