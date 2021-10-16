@@ -12,3 +12,10 @@
 
 ### Application 2 : Weather App
 <img src="images/TD2.png"  width="400">
+
+## TD3
+
+### Amélioration du quiz : Firebase et pattern bloc
+<img src="images/TD3-1.png"  width="400">
+<img src="images/TD3-2.png"  width="400">
+<img src="images/TD3-3.png"  width="400">
