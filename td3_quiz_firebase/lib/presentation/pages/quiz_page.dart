@@ -6,13 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:td3_quiz_firebase/buisness_logic/bloc/question_bloc/question_bloc.dart';
 import 'package:td3_quiz_firebase/buisness_logic/cubits/answer_question_cubit.dart';
 import 'package:td3_quiz_firebase/buisness_logic/cubits/next_question_cubit.dart';
-import 'package:td3_quiz_firebase/buisness_logic/cubits/score_quiz_cubit.dart';
 import 'package:td3_quiz_firebase/data/models/theme_model.dart';
-import 'package:td3_quiz_firebase/data/repositories/question_repository.dart';
+//import 'package:td3_quiz_firebase/data/repositories/question_repository.dart';
 import 'package:td3_quiz_firebase/data/repositories/theme_repository.dart';
+import 'package:td3_quiz_firebase/presentation/Widgets/buttons_quiz_widget.dart';
 //import 'package:td3_quiz_firebase/data/repositories/questions_repository.dart';
 import 'package:td3_quiz_firebase/presentation/Widgets/image_quiz_widget.dart';
 import 'package:td3_quiz_firebase/presentation/Widgets/index_quiz_widget.dart';
+import 'package:td3_quiz_firebase/presentation/Widgets/noquestion_container_widget.dart';
 import 'package:td3_quiz_firebase/presentation/Widgets/score_quiz_widget.dart';
 import 'package:td3_quiz_firebase/presentation/pages/formulaire_questions_page.dart';
 import 'package:td3_quiz_firebase/presentation/pages/home_page.dart';
@@ -41,110 +42,15 @@ class QuizPage extends StatelessWidget {
     repository.addQuestion("The unicorn is the national animal of Scotland", true, "Histoire");
     repository.addQuestion("There are two parts of the body that can't heal themselves", false, "Histoire");
 */
-    void nextQuestion(BuildContext c, int index, int indexMax) {
-      if (index + 1 == indexMax) {
-        c.read<NextQuestionCubit>().reset();
-        c.read<ScoreQuizCubit>().reset();
-      } else {
-        c.read<NextQuestionCubit>().next();
-      }
-      c.read<AnswerQuestionCubit>().reset();
-    }
-
-    void checkAnswer(BuildContext c, bool answer, bool userAnswer) {
-      if (answer == userAnswer) {
-        c.read<AnswerQuestionCubit>().correct();
-        c.read<ScoreQuizCubit>().increment();
-      } else {
-        c.read<AnswerQuestionCubit>().incorrect();
-        c.read<ScoreQuizCubit>().decrement();
-      }
-    }
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Quiz : ${thematique.nom}"),
         actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => FormulaireQuestionsPage(
-                            thematique: thematique.nom,
-                          )),
-                ),
-                child: const Icon(
-                  Icons.add,
-                  size: 26.0,
-                ),
-              )),
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () => showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: Text('Supression pour le thème : ${thematique.nom}'),
-                    content: const Text(
-                        "Vous avez le choix entre supprimer la question et supprimer le thème. (La suppression de la question n'est pas encore implémenté)"),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'Cancel'),
-                        child: const Text('Annuler'),
-                      ),
-                      /*
-                      BlocBuilder<QuestionBloc, QuestionState>(
-                        builder: (context, state) {
-                          if (state is QuestionLoaded) {
-                            return TextButton(
-                              // supprimer la question
-                              onPressed: () {
-                                final QuestionRepository repository =
-                                    
-                                //repository.deleteQuestion(thematique.nom);
-
-                                // on retourne à la page home
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const HomePage(
-                                            title: 'Thématiques',
-                                          )),
-                                );
-                              },
-                              child: const Text('Supprimer la question'),
-                            );
-                          }else{
-                            return Container();
-                          }
-                        },
-                      ),*/
-                      TextButton(
-                        onPressed: () {
-                          final ThemeRepository repository = ThemeRepository();
-                          repository.deleteTheme(thematique.nom);
-
-                          // on retourne à la page home
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage(
-                                      title: 'Thématiques',
-                                    )),
-                          );
-                        },
-                        child: const Text('Supprimer le thème'),
-                      ),
-                    ],
-                  ),
-                ),
-                child: const Icon(
-                  Icons.delete,
-                  size: 26.0,
-                ),
-              )),
+          // Bouton pour aller sur la page de formulaire d'ajout d'une question
+          ButtonToFormQuestionPage(thematique: thematique),
+          // Bouton pour supprimer la thématique
+          ButtonDelete(thematique: thematique),
         ],
       ),
       body: SingleChildScrollView(
@@ -168,9 +74,8 @@ class QuizPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     const SizedBox(height: 20),
+                    // Container for Header (score and index)
                     Container(
-                        // Container for Header (score and index)
-
                         width: 350,
                         height: 50,
                         alignment: Alignment.center,
@@ -182,7 +87,8 @@ class QuizPage extends StatelessWidget {
                           ],
                         )),
                     const SizedBox(height: 10),
-                    ImageQuiz(url: thematique.getUrl()), // image quiz
+                    // image de la thématique du quiz
+                    ImageQuiz(url: thematique.getUrl()), 
                     const SizedBox(height: 20),
 
                     BlocBuilder<NextQuestionCubit, int>(
@@ -215,9 +121,9 @@ class QuizPage extends StatelessWidget {
                                   } else if (state is QuestionLoaded) {
                                     return Text(
                                       state.getQuestions
-                                          .elementAt(0)!
+                                          .elementAt(index)!
                                           .question
-                                          .toString(), // state.getQuestions.first.toString(),  //game.getQuestion(index),
+                                          .toString(),
                                       style: const TextStyle(fontSize: 18),
                                       textAlign: TextAlign.center,
                                     );
@@ -233,95 +139,123 @@ class QuizPage extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 40),
-                    Container(
-                        // Container for Buttons
-                        width: 350,
-                        height: 50,
-                        child: BlocBuilder<NextQuestionCubit, int>(
-                            builder: (_, index) {
-                          return BlocBuilder<AnswerQuestionCubit, int>(
-                              builder: (_, answer) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: answer != 2
-                                      ? null
-                                      : () => checkAnswer(
-                                          context,
-                                          state.questions
-                                              .elementAt(index)!
-                                              .isTrue,
-                                          true),
-                                  child: const Text("Vrai",
-                                      style: TextStyle(fontSize: 18)),
-                                ),
-                                ElevatedButton(
-                                  // si c'est la fin du quiz on reset
-                                  onPressed: answer != 2
-                                      ? null
-                                      : () => checkAnswer(
-                                          context,
-                                          state.questions
-                                              .elementAt(index)!
-                                              .isTrue,
-                                          false),
-                                  child: const Text("Faux",
-                                      style: TextStyle(fontSize: 18)),
-                                ),
-                                ElevatedButton(
-                                  // si c'est la fin du quiz on reset
-                                  onPressed: answer == 2
-                                      ? null
-                                      : () => nextQuestion(context, index,
-                                          state.questions.length),
-                                  child: Wrap(
-                                    children: [
-                                      Text(
-                                          index + 1 == state.questions.length
-                                              ? "Recommencer"
-                                              : "Suivant",
-                                          style: const TextStyle(fontSize: 18)),
-                                      const Icon(Icons.keyboard_arrow_right)
-                                    ],
-                                  ),
-                                )
-                              ],
-                            );
-                          });
-                        })),
+                    // Les boutons vrai, faux, suivant
+                    ButtonsQuiz(state: state),
                   ],
                 ),
               );
             }
-            return Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  const Text("Il n'y a pas encore de questions dans ce quiz."),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        // on va sur le formulaire ajout de question
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FormulaireQuestionsPage(
-                                    thematique: thematique.nom,
-                                  )),
-                        );
-                      },
-                      child: const Text("Ajouter une question")),
-                ]));
+            // Si il n'y a pas de questions, on affiche un message et un bouton pour ajouter une question
+            return NoQuestionContainer(thematique: thematique);
           },
         ),
       ),
     );
+  }
+}
+
+class ButtonDelete extends StatelessWidget {
+  const ButtonDelete({
+    Key? key,
+    required this.thematique,
+  }) : super(key: key);
+
+  final ThemeQuiz thematique;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(right: 20.0),
+        child: GestureDetector(
+          onTap: () => showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: Text('Supression pour le thème : ${thematique.nom}'),
+              content: const Text(
+                  "Vous avez le choix entre supprimer la question et supprimer le thème. (La suppression de la question n'est pas encore implémenté)"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                  child: const Text('Annuler'),
+                ),
+                /*
+                BlocBuilder<QuestionBloc, QuestionState>(
+                  builder: (context, state) {
+                    if (state is QuestionLoaded) {
+                      return TextButton(
+                        // supprimer la question
+                        onPressed: () {
+                          final QuestionRepository repository =
+                              
+                          //repository.deleteQuestion(thematique.nom);
+
+                          // on retourne à la page home
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage(
+                                      title: 'Thématiques',
+                                    )),
+                          );
+                        },
+                        child: const Text('Supprimer la question'),
+                      );
+                    }else{
+                      return Container();
+                    }
+                  },
+                ),*/
+                TextButton(
+                  onPressed: () {
+                    final ThemeRepository repository = ThemeRepository();
+                    repository.deleteTheme(thematique.nom);
+
+                    // on retourne à la page home
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage(
+                                title: 'Thématiques',
+                              )),
+                    );
+                  },
+                  child: const Text('Supprimer le thème'),
+                ),
+              ],
+            ),
+          ),
+          child: const Icon(
+            Icons.delete,
+            size: 26.0,
+          ),
+        ));
+  }
+}
+
+class ButtonToFormQuestionPage extends StatelessWidget {
+  const ButtonToFormQuestionPage({
+    Key? key,
+    required this.thematique,
+  }) : super(key: key);
+
+  final ThemeQuiz thematique;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(right: 20.0),
+        child: GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FormulaireQuestionsPage(
+                      thematique: thematique.nom,
+                    )),
+          ),
+          child: const Icon(
+            Icons.add,
+            size: 26.0,
+          ),
+        ));
   }
 }
