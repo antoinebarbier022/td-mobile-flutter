@@ -1,15 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
-import 'package:provider/src/provider.dart';
 import 'package:td3_quiz_firebase/buisness_logic/bloc/question_bloc/question_bloc.dart';
-import 'package:td3_quiz_firebase/buisness_logic/bloc/thematique_bloc/thematique_bloc.dart';
-import 'package:td3_quiz_firebase/buisness_logic/cubits/answer_question_cubit.dart';
-import 'package:td3_quiz_firebase/buisness_logic/cubits/next_question_cubit.dart';
-import 'package:td3_quiz_firebase/buisness_logic/cubits/score_quiz_cubit.dart';
-import 'package:td3_quiz_firebase/data/models/theme_model.dart';
-import 'package:td3_quiz_firebase/presentation/pages/quiz_page.dart';
-import 'package:td3_quiz_firebase/presentation/pages/update_questions_page.dart';
 
 class QuestionItemContainer extends StatelessWidget {
   const QuestionItemContainer({
@@ -23,11 +15,6 @@ class QuestionItemContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void resetCubit(BuildContext c) {
-      c.read<NextQuestionCubit>().reset();
-      c.read<ScoreQuizCubit>().reset();
-      c.read<AnswerQuestionCubit>().reset();
-    }
 
     return Container(
           width: 350,
@@ -38,30 +25,29 @@ class QuestionItemContainer extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Container(
-                  child: Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: 280,
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(state.questions.elementAt(index)!.question,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).hintColor,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  Container(
-                   
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(state.questions.elementAt(index)!.isTrue ? "Vrai" : "Faux",
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).hintColor,
-                            fontWeight: FontWeight.bold)),
-                  ),
+              Container(
+                width: 280,
+                padding: const EdgeInsets.all(10.0),
+                child: Text(state.questions.elementAt(index)!.question,
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).hintColor,
+                        fontWeight: FontWeight.bold)),
+              ),
+              Container(
+               
+                padding: const EdgeInsets.all(10.0),
+                child: Text(state.questions.elementAt(index)!.isTrue ? "Vrai" : "Faux",
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).hintColor,
+                        fontWeight: FontWeight.bold)),
+              ),
                 ],
-              ))
+              )
             ],
           ));
   }

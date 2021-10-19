@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:td3_quiz_firebase/buisness_logic/bloc/question_bloc/question_bloc.dart';
 import 'package:td3_quiz_firebase/presentation/Widgets/buttons/button_delete_thematique_widget.dart';
-import 'package:td3_quiz_firebase/presentation/Widgets/items/question_item_container_widget.dart';
+import 'package:td3_quiz_firebase/presentation/Widgets/items/item_question_container_widget.dart';
 import 'package:td3_quiz_firebase/presentation/pages/forms/formulaire_questions_page.dart';
 
 

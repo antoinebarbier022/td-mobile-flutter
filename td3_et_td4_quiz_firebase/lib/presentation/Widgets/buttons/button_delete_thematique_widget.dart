@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:td3_quiz_firebase/data/models/theme_model.dart';
 import 'package:td3_quiz_firebase/data/repositories/theme_repository.dart';
 import 'package:td3_quiz_firebase/presentation/pages/home_page.dart';
 

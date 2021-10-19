@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:td3_quiz_firebase/buisness_logic/bloc/thematique_bloc/thematique_bloc.dart';
 import 'package:td3_quiz_firebase/presentation/Widgets/buttons/switch_dark_mode_widget.dart';
-import 'package:td3_quiz_firebase/presentation/Widgets/items/thematique_item_container_widget.dart';
+import 'package:td3_quiz_firebase/presentation/Widgets/items/item_thematique_container_widget.dart';
 import 'package:td3_quiz_firebase/presentation/pages/forms/formulaire_theme_page.dart';
 
 class HomePage extends StatelessWidget {

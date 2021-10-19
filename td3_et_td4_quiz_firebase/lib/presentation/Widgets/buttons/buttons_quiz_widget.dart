@@ -33,38 +33,6 @@ class ButtonsQuiz extends StatelessWidget {
     }
   }
 
-  Future<String?> showFinishDialog(BuildContext c) {
-    return showDialog<String>(
-      context: c,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('Bravo, tu as terminé le quiz !'),
-        content: const Text(""),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const HomePage(
-                        title: 'Thématiques',
-                      )),
-            ),
-            child: const Text('Retour au menu'),
-          ),
-          TextButton(
-            onPressed: () {
-              // on retourne à la page home
-              c.read<NextQuestionCubit>().reset();
-              c.read<ScoreQuizCubit>().reset();
-              c.read<AnswerQuestionCubit>().reset();
-              Navigator.pop(context);
-            },
-            child: const Text('Recommencer le quiz'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void checkAnswer(BuildContext c, bool answer, bool userAnswer) {
     if (answer == userAnswer) {
       c.read<AnswerQuestionCubit>().correct();
