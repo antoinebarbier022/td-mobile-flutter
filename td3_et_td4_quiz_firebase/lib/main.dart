@@ -6,12 +6,12 @@ import 'package:td3_quiz_firebase/buisness_logic/bloc/question_bloc/question_blo
 import 'package:td3_quiz_firebase/buisness_logic/cubits/answer_question_cubit.dart';
 import 'package:td3_quiz_firebase/buisness_logic/cubits/next_question_cubit.dart';
 import 'package:td3_quiz_firebase/buisness_logic/cubits/score_quiz_cubit.dart';
+import 'package:td3_quiz_firebase/buisness_logic/cubits/theme_mode_cubit.dart';
 import 'package:td3_quiz_firebase/data/repositories/question_repository.dart';
 import 'package:td3_quiz_firebase/presentation/pages/home_page.dart';
 
-import 'buisness_logic/bloc/thematique_bloc/theme_bloc.dart';
+import 'buisness_logic/bloc/thematique_bloc/thematique_bloc.dart';
 import 'data/repositories/theme_repository.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,18 +39,32 @@ class MyApp extends StatelessWidget {
         BlocProvider<QuestionBloc>(
           create: (BuildContext context) => QuestionBloc(QuestionRepository()),
         ),
-        BlocProvider<ThemeBloc>(
-          create: (BuildContext context) => ThemeBloc(ThemeRepository()),
+        BlocProvider<ThemeCubit>(
+          create: (BuildContext context) => ThemeCubit(),
+        ),
+        BlocProvider<ThematiqueBloc>(
+          create: (BuildContext context) => ThematiqueBloc(ThemeRepository()),
         ),
       ],
-      child: MaterialApp(
-        title: 'Questions/Réponses',
-        theme: ThemeData(
-          scaffoldBackgroundColor: Colors.grey[200],
-          primarySwatch: Colors.blue,
-        ),
-        home: const HomePage(title: "Thématiques"),
-        ),
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (_, themeMode) {
+          return MaterialApp(
+            title: 'Questions/Réponses',
+            theme: ThemeData(
+              brightness: Brightness.light,
+              scaffoldBackgroundColor: Colors.grey[200],
+              primarySwatch: Colors.blue,
+              cardColor: Colors.white,
+            ),
+            darkTheme: ThemeData(
+              brightness: Brightness.dark
+              
+            ),
+            themeMode: themeMode,
+            home: const HomePage(title: "Thématiques"),
+          );
+        },
+      ),
     );
   }
 }

@@ -3,17 +3,17 @@ import 'package:meta/meta.dart';
 import 'package:td3_quiz_firebase/data/models/theme_model.dart';
 import 'package:td3_quiz_firebase/data/repositories/theme_repository.dart';
 
-part 'theme_event.dart';
-part 'theme_state.dart';
+part 'thematique_event.dart';
+part 'thematique_state.dart';
 
-class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
+class ThematiqueBloc extends Bloc<ThematiqueEvent, ThematiqueState> {
   ThemeRepository repository;
 
-  ThemeBloc(this.repository) : super(ThemeInitial());
-  ThemeState get initialState => ThemeInitial();
+  ThematiqueBloc(this.repository) : super(ThemeInitial());
+  ThematiqueState get initialState => ThemeInitial();
 
     @override
-  Stream<ThemeState> mapEventToState(ThemeEvent event) async* {
+  Stream<ThematiqueState> mapEventToState(ThematiqueEvent event) async* {
     if (event is GetAllThemes) {
       yield ThemeLoading();
       try {

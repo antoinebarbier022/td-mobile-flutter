@@ -1,10 +1,10 @@
-part of 'theme_bloc.dart';
+part of 'thematique_bloc.dart';
 
 @immutable
-abstract class ThemeEvent {}
+abstract class ThematiqueEvent {}
 
 
-class GetAllThemes extends ThemeEvent {  
+class GetAllThemes extends ThematiqueEvent {  
   GetAllThemes();
   List<Object> get props => [];
   @override

@@ -1,65 +1,66 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:td3_quiz_firebase/buisness_logic/bloc/thematique_bloc/theme_bloc.dart';
-import 'package:td3_quiz_firebase/data/repositories/question_repository.dart';
+import 'package:td3_quiz_firebase/buisness_logic/bloc/thematique_bloc/thematique_bloc.dart';
+import 'package:td3_quiz_firebase/data/repositories/theme_repository.dart';
 import 'package:td3_quiz_firebase/presentation/pages/home_page.dart';
 
-class FormulaireQuestionsPage extends StatelessWidget {
-  const FormulaireQuestionsPage({Key? key, required this.thematique}) : super(key: key);
+class FormulaireThemePage extends StatelessWidget {
+  const FormulaireThemePage({Key? key, required this.title}) : super(key: key);
 
-  final String thematique;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Nouvelle question ($thematique)"),
+          title: Text(title),
         ),
         body: Container(
-            padding: const EdgeInsets.all(20.0), child:  QuestionForm(thematique: thematique)));
+            padding: const EdgeInsets.all(20.0), child: const ThemeForm()));
   }
 }
 
 // Create a Form widget.
-class QuestionForm extends StatefulWidget {
-  const QuestionForm({Key? key, required this.thematique}) : super(key: key);
+class ThemeForm extends StatefulWidget {
+  const ThemeForm({Key? key}) : super(key: key);
 
-  final String thematique;
   @override
-  QuestionFormState createState() {
-    return QuestionFormState();
+  ThemeFormState createState() {
+    return ThemeFormState();
   }
 }
 
 // Create a corresponding State class.
 // This class holds data related to the form.
-class QuestionFormState extends State<QuestionForm> {
+class ThemeFormState extends State<ThemeForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //
   // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<QuestionFormState>.
+  // not a GlobalKey<ThemeFormState>.
   final _formKey = GlobalKey<FormState>();
 
-  late TextEditingController _controllerQuestion;
+  late TextEditingController _controllerNameTheme;
+  late TextEditingController _controllerURLTheme;
 
-  bool isSwitched = false;
   @override
   void initState() {
     super.initState();
-    _controllerQuestion = TextEditingController();
+    _controllerNameTheme = TextEditingController();
+    _controllerURLTheme = TextEditingController();
   }
 
   @override
   void dispose() {
-    _controllerQuestion.dispose();
+    _controllerNameTheme.dispose();
+    _controllerURLTheme.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeBloc = BlocProvider.of<ThemeBloc>(context);
+    final themeBloc = BlocProvider.of<ThematiqueBloc>(context);
     themeBloc.add(GetAllThemes());
     // Build a Form widget using the _formKey created above.
     return Form(
@@ -69,16 +70,16 @@ class QuestionFormState extends State<QuestionForm> {
         children: [
           // Theme input
           TextFormField(
-            controller: _controllerQuestion,
+            controller: _controllerNameTheme,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              hintText: 'Entrer la question',
-              labelText: 'Question',
+              hintText: 'Entrer le nom de la thématique',
+              labelText: 'Thème',
             ),
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'La question est vide.';
+                return 'Le nom du thème est vide.';
               }
               return null;
             },
@@ -86,21 +87,15 @@ class QuestionFormState extends State<QuestionForm> {
           const SizedBox(
             height: 16,
           ),
-
-          Row(
-            children: [
-              const Text("Réponse "),
-              Switch(
-                value: isSwitched,
-                onChanged: (value) {
-                  setState(() {
-                    isSwitched = value;
-                  });
-                },),
-            ],
+          // URL input
+          TextFormField(
+            controller: _controllerURLTheme,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Lien de l\'image du thème',
+              labelText: 'URL',
+            ),
           ),
-          
-          
           const SizedBox(
             height: 16,
           ),
@@ -108,9 +103,9 @@ class QuestionFormState extends State<QuestionForm> {
             onPressed: () {
               // Validate returns true if the form is valid, or false otherwise.
               if (_formKey.currentState!.validate()) {
-                final QuestionRepository repository = QuestionRepository();
-                repository.addQuestion(
-                    _controllerQuestion.text, isSwitched, widget.thematique);
+                final ThemeRepository repository = ThemeRepository();
+                repository.addTheme(
+                    _controllerNameTheme.text, _controllerURLTheme.text);
 
                 // on get tous les thèmes pour mettre à jour le bloc
                 themeBloc.add(GetAllThemes());
@@ -127,11 +122,11 @@ class QuestionFormState extends State<QuestionForm> {
                 // If the form is valid, display a snackbar. In the real world,
                 // you'd often call a server or save the information in a database.
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Ajout de la question')),
+                  const SnackBar(content: Text('Ajout du thème')),
                 );
               }
             },
-            child: const Text('Créer la question'),
+            child: const Text('Créer la thématique'),
           ),
         ],
       ),

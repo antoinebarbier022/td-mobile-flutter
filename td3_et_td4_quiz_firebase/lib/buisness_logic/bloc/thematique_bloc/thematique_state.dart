@@ -1,25 +1,25 @@
-part of 'theme_bloc.dart';
+part of 'thematique_bloc.dart';
 
 @immutable
-abstract class ThemeState {}
+abstract class ThematiqueState {}
 
-class ThematiqueInitial extends ThemeState {}
+class ThematiqueInitial extends ThematiqueState {}
 
 
 
-class ThemeInitial extends ThemeState {
+class ThemeInitial extends ThematiqueState {
   @override
   String toString() => 'ThemeInitial';
 }
 
 
-class ThemeLoading extends ThemeState {
+class ThemeLoading extends ThematiqueState {
   @override
   String toString() => 'ThemeLoading';
 }
 
 // ignore: must_be_immutable
-class ThemeLoaded extends ThemeState {
+class ThemeLoaded extends ThematiqueState {
   List<ThemeQuiz?> themes = [];
 
   ThemeLoaded(this.themes);
@@ -32,7 +32,7 @@ class ThemeLoaded extends ThemeState {
   String toString() => 'ThemeLoaded';
 }
 
-class ThemeNotLoaded extends ThemeState {
+class ThemeNotLoaded extends ThematiqueState {
   @override
   String toString() => 'ThemeNotLoaded';
 }

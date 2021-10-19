@@ -22,7 +22,6 @@ class IndexQuiz extends StatelessWidget {
                     'Question ${index + 1}/${state.questions.length}',
                     style: const TextStyle(
                         fontSize: 18,
-                        color: Colors.black,
                         fontWeight: FontWeight.bold));
               } else {
                 return Container();

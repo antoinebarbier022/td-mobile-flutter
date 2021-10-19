@@ -137,6 +137,7 @@ class ButtonsQuiz extends StatelessWidget {
                           )
                          : null,
                 ),
+                const SizedBox(height: 15),
                 SizedBox(
                   width: 350,
                   child: answer == 2

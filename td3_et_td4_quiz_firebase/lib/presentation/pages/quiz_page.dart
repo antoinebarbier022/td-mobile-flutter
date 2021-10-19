@@ -7,16 +7,17 @@ import 'package:td3_quiz_firebase/buisness_logic/bloc/question_bloc/question_blo
 import 'package:td3_quiz_firebase/buisness_logic/cubits/answer_question_cubit.dart';
 import 'package:td3_quiz_firebase/buisness_logic/cubits/next_question_cubit.dart';
 import 'package:td3_quiz_firebase/data/models/theme_model.dart';
+import 'package:td3_quiz_firebase/presentation/Widgets/all/image_quiz_widget.dart';
+import 'package:td3_quiz_firebase/presentation/Widgets/all/index_quiz_widget.dart';
+import 'package:td3_quiz_firebase/presentation/Widgets/all/noquestion_container_widget.dart';
+import 'package:td3_quiz_firebase/presentation/Widgets/all/score_quiz_widget.dart';
+import 'package:td3_quiz_firebase/presentation/Widgets/buttons/buttons_quiz_widget.dart';
 //import 'package:td3_quiz_firebase/data/repositories/question_repository.dart';
-import 'package:td3_quiz_firebase/data/repositories/theme_repository.dart';
-import 'package:td3_quiz_firebase/presentation/Widgets/buttons_quiz_widget.dart';
+
 //import 'package:td3_quiz_firebase/data/repositories/questions_repository.dart';
-import 'package:td3_quiz_firebase/presentation/Widgets/image_quiz_widget.dart';
-import 'package:td3_quiz_firebase/presentation/Widgets/index_quiz_widget.dart';
-import 'package:td3_quiz_firebase/presentation/Widgets/noquestion_container_widget.dart';
-import 'package:td3_quiz_firebase/presentation/Widgets/score_quiz_widget.dart';
-import 'package:td3_quiz_firebase/presentation/pages/formulaire_questions_page.dart';
-import 'package:td3_quiz_firebase/presentation/pages/home_page.dart';
+import 'package:td3_quiz_firebase/presentation/Widgets/buttons/switch_dark_mode_widget.dart';
+import 'package:td3_quiz_firebase/presentation/pages/forms/formulaire_questions_page.dart';
+
 
 class QuizPage extends StatelessWidget {
   const QuizPage({Key? key, required this.thematique}) : super(key: key);
@@ -43,14 +44,15 @@ class QuizPage extends StatelessWidget {
     repository.addQuestion("There are two parts of the body that can't heal themselves", false, "Histoire");
 */
 
+    double valueProgressBar(int answer, int index, int indexMax) {
+      return answer == 2 ? (index) / indexMax : (index+1) / indexMax;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Quiz : ${thematique.nom}"),
-        actions: <Widget>[
-          // Bouton pour aller sur la page de formulaire d'ajout d'une question
-          ButtonToFormQuestionPage(thematique: thematique),
-          // Bouton pour supprimer la thématique
-          ButtonDelete(thematique: thematique),
+        actions: const <Widget>[
+          SwitchDarkMode(),
         ],
       ),
       body: SingleChildScrollView(
@@ -75,7 +77,7 @@ class QuizPage extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   width: 400,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -93,14 +95,20 @@ class QuizPage extends StatelessWidget {
                               ],
                             )),
                         const SizedBox(height: 10),
-                        BlocBuilder<NextQuestionCubit, int>(
-                          builder: (_, index) {
-                            return ClipRRect(
-                                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        BlocBuilder<AnswerQuestionCubit, int>(
+                          builder: (_, answer) {
+                            return BlocBuilder<NextQuestionCubit, int>(
+                              builder: (_, index) {
+                                return ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
                                   child: LinearProgressIndicator(
-                                    value: (index) / (state.questions.length),
+                                    value: valueProgressBar(
+                                        answer, index, state.questions.length),
                                   ),
                                 );
+                              },
+                            );
                           },
                         ),
                         const SizedBox(height: 10),
@@ -120,10 +128,10 @@ class QuizPage extends StatelessWidget {
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                       color: answer == 2
-                                            ? Colors.blueGrey.shade100
-                                            : (answer == 1
-                                                ? Colors.green.shade100
-                                                : Colors.red.shade100),
+                                          ? Colors.transparent
+                                          : (answer == 1
+                                              ? Colors.green.shade100
+                                              : Colors.red.shade100),
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
                                         width: 2.0,
@@ -146,7 +154,12 @@ class QuizPage extends StatelessWidget {
                                               .elementAt(index)!
                                               .question
                                               .toString(),
-                                          style: const TextStyle(fontSize: 18),
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: answer == 2
+                                                ? Theme.of(context).hintColor
+                                                : Colors.black,
+                                          ),
                                           textAlign: TextAlign.center,
                                         );
                                       } else if (state is QuestionNotLoaded) {
@@ -175,84 +188,6 @@ class QuizPage extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class ButtonDelete extends StatelessWidget {
-  const ButtonDelete({
-    Key? key,
-    required this.thematique,
-  }) : super(key: key);
-
-  final ThemeQuiz thematique;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.only(right: 20.0),
-        child: GestureDetector(
-          onTap: () => showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: Text('Supression pour le thème : ${thematique.nom}'),
-              content: const Text(
-                  "Vous avez le choix entre supprimer la question et supprimer le thème. (La suppression de la question n'est pas encore implémenté)"),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                  child: const Text('Annuler'),
-                ),
-                /*
-                BlocBuilder<QuestionBloc, QuestionState>(
-                  builder: (context, state) {
-                    if (state is QuestionLoaded) {
-                      return TextButton(
-                        // supprimer la question
-                        onPressed: () {
-                          final QuestionRepository repository =
-                              
-                          //repository.deleteQuestion(thematique.nom);
-
-                          // on retourne à la page home
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage(
-                                      title: 'Thématiques',
-                                    )),
-                          );
-                        },
-                        child: const Text('Supprimer la question'),
-                      );
-                    }else{
-                      return Container();
-                    }
-                  },
-                ),*/
-                TextButton(
-                  onPressed: () {
-                    final ThemeRepository repository = ThemeRepository();
-                    repository.deleteTheme(thematique.nom);
-
-                    // on retourne à la page home
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomePage(
-                                title: 'Thématiques',
-                              )),
-                    );
-                  },
-                  child: const Text('Supprimer le thème'),
-                ),
-              ],
-            ),
-          ),
-          child: const Icon(
-            Icons.delete,
-            size: 26.0,
-          ),
-        ));
   }
 }
 
