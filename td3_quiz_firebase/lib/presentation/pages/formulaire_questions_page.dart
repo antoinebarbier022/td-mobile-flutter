@@ -95,7 +95,6 @@ class QuestionFormState extends State<QuestionForm> {
                 onChanged: (value) {
                   setState(() {
                     isSwitched = value;
-                    print(isSwitched);
                   });
                 },),
             ],

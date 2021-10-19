@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 import 'package:td3_quiz_firebase/buisness_logic/bloc/thematique_bloc/theme_bloc.dart';
 import 'package:td3_quiz_firebase/buisness_logic/cubits/answer_question_cubit.dart';
@@ -20,7 +21,7 @@ class ThematiqueItemContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        void resetCubit(BuildContext c) {
+    void resetCubit(BuildContext c) {
       c.read<NextQuestionCubit>().reset();
       c.read<ScoreQuizCubit>().reset();
       c.read<AnswerQuestionCubit>().reset();
@@ -42,9 +43,10 @@ class ThematiqueItemContainer extends StatelessWidget {
       },
       child: Container(
           width: 200,
-          margin: const EdgeInsets.all(5.0),
+          margin: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           decoration: BoxDecoration(
-            color: Colors.grey[350],
+            color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(

@@ -27,6 +27,7 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
       } catch (error) {
         yield QuestionNotLoaded();
       }
+      
     }else if(event is GetAllQuestionsForThematique){
       yield QuestionLoading();
       try {

@@ -29,6 +29,8 @@ environment:
 dependencies:
   firebase_core: ^1.7.0
   cloud_firestore: ^2.5.3
+  firebase_core_web: 
+  cloud_firestore_web: 
   flutter:
     sdk: flutter
 

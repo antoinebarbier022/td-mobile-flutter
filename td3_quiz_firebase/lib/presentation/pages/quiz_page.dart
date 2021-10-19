@@ -70,78 +70,102 @@ class QuizPage extends StatelessWidget {
             }
             if (state is QuestionLoaded) {
               return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(height: 20),
-                    // Container for Header (score and index)
-                    Container(
-                        width: 350,
-                        height: 50,
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            IndexQuiz(), // index du jeu (numéro question en cours)
-                            ScoreQuiz(), // Score du jeu
-                          ],
-                        )),
-                    const SizedBox(height: 10),
-                    // image de la thématique du quiz
-                    ImageQuiz(url: thematique.getUrl()), 
-                    const SizedBox(height: 20),
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
+                  width: 400,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        // Container for Header (score and index)
+                        Container(
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                IndexQuiz(), // index du jeu (numéro question en cours)
+                                ScoreQuiz(), // Score du jeu
+                              ],
+                            )),
+                        const SizedBox(height: 10),
+                        BlocBuilder<NextQuestionCubit, int>(
+                          builder: (_, index) {
+                            return ClipRRect(
+                                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                  child: LinearProgressIndicator(
+                                    value: (index) / (state.questions.length),
+                                  ),
+                                );
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        // image de la thématique du quiz
+                        ImageQuiz(url: thematique.getUrl()),
+                        const SizedBox(height: 20),
 
-                    BlocBuilder<NextQuestionCubit, int>(
-                      builder: (_, index) {
-                        return BlocBuilder<AnswerQuestionCubit, int>(
-                            builder: (_, answer) {
-                          return Container(
-                              // Container for Questions
-                              width: 350,
-                              height: 150,
-                              padding: const EdgeInsets.all(10),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    width: 2.0,
-                                    color: answer == 2
-                                        ? Colors.blueGrey.shade200
-                                        : (answer == 1
-                                            ? Colors.green
-                                            : Colors.red),
-                                  )),
-                              child: BlocBuilder<QuestionBloc, QuestionState>(
-                                builder: (context, state) {
-                                  if (state is QuestionLoading) {
-                                    // Chargement
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (state is QuestionLoaded) {
-                                    return Text(
-                                      state.getQuestions
-                                          .elementAt(index)!
-                                          .question
-                                          .toString(),
-                                      style: const TextStyle(fontSize: 18),
-                                      textAlign: TextAlign.center,
-                                    );
-                                  } else if (state is QuestionNotLoaded) {
-                                    return const Center(
-                                        child: Text("Aucun résultats"));
-                                  }
-                                  return const Center(
-                                      child: Text("Aucun résultats"));
-                                },
-                              ));
-                        });
-                      },
+                        BlocBuilder<NextQuestionCubit, int>(
+                          builder: (_, index) {
+                            return BlocBuilder<AnswerQuestionCubit, int>(
+                                builder: (_, answer) {
+                              return Container(
+                                  // Container for Questions
+                                  width: 350,
+                                  height: 150,
+                                  padding: const EdgeInsets.all(10),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: answer == 2
+                                            ? Colors.blueGrey.shade100
+                                            : (answer == 1
+                                                ? Colors.green.shade100
+                                                : Colors.red.shade100),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        width: 2.0,
+                                        color: answer == 2
+                                            ? Colors.blueGrey.shade200
+                                            : (answer == 1
+                                                ? Colors.green
+                                                : Colors.red),
+                                      )),
+                                  child:
+                                      BlocBuilder<QuestionBloc, QuestionState>(
+                                    builder: (context, state) {
+                                      if (state is QuestionLoading) {
+                                        // Chargement
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      } else if (state is QuestionLoaded) {
+                                        return Text(
+                                          state.getQuestions
+                                              .elementAt(index)!
+                                              .question
+                                              .toString(),
+                                          style: const TextStyle(fontSize: 18),
+                                          textAlign: TextAlign.center,
+                                        );
+                                      } else if (state is QuestionNotLoaded) {
+                                        return const Center(
+                                            child: Text("Aucun résultats"));
+                                      }
+                                      return const Center(
+                                          child: Text("Aucun résultats"));
+                                    },
+                                  ));
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 40),
+                        // Les boutons vrai, faux, suivant
+                        ButtonsQuiz(state: state),
+                      ],
                     ),
-                    const SizedBox(height: 40),
-                    // Les boutons vrai, faux, suivant
-                    ButtonsQuiz(state: state),
-                  ],
+                  ),
                 ),
               );
             }

@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Questions/Réponses',
         theme: ThemeData(
+          scaffoldBackgroundColor: Colors.grey[200],
           primarySwatch: Colors.blue,
         ),
         home: const HomePage(title: "Thématiques"),

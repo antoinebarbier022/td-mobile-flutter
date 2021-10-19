@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
 
           if (state is ThemeLoaded) {
             return ListView.builder(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(20.0),
                 reverse: false,
                 itemCount: state.getThemes.length,
                 itemBuilder: (_, int index) {
