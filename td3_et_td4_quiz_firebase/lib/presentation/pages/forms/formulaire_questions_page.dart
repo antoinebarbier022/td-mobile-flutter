@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:td3_quiz_firebase/buisness_logic/bloc/thematique_bloc/thematique_bloc.dart';
 import 'package:td3_quiz_firebase/data/repositories/question_repository.dart';
 import 'package:td3_quiz_firebase/presentation/pages/home_page.dart';
+import 'package:td3_quiz_firebase/presentation/pages/update_questions_page.dart';
 
 class FormulaireQuestionsPage extends StatelessWidget {
   const FormulaireQuestionsPage({Key? key, required this.thematique}) : super(key: key);
@@ -119,8 +120,8 @@ class QuestionFormState extends State<QuestionForm> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const HomePage(
-                            title: 'Thématiques',
+                      builder: (context) => UpdateQuestionsPage(
+                            thematique: widget.thematique,
                           )),
                 );
 

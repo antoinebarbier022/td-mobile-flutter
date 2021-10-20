@@ -29,6 +29,7 @@ class ThematiqueItemContainer extends StatelessWidget {
     }
 
     return InkWell(
+      
       // bouton sur le container
       onTap: () {
         Navigator.push(
@@ -63,30 +64,27 @@ class ThematiqueItemContainer extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(state.getThemes.elementAt(index)!.nom,
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Theme.of(context).hintColor,
-                        fontWeight: FontWeight.bold)),
-              ),
-              IconButton(
-                  icon: const Icon(
-                    Icons.settings,
+                  Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(state.getThemes.elementAt(index)!.nom,
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).hintColor,
+                            fontWeight: FontWeight.bold)),
                   ),
-                  color: Theme.of(context).hintColor,
-                  onPressed: () => 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  UpdateQuestionsPage(
-                                    thematique:
-                                        state.getThemes.elementAt(index)!.nom,
-                                  )),
-                        )
-                      )
+                  IconButton(
+                      icon: const Icon(
+                        Icons.settings,
+                      ),
+                      color: Theme.of(context).hintColor,
+                      onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UpdateQuestionsPage(
+                                      thematique:
+                                          state.getThemes.elementAt(index)!.nom,
+                                    )),
+                          ))
                 ],
               )
             ],
